@@ -5,6 +5,7 @@ import {useForm} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
+import Auth from '../../services/auth';
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -15,7 +16,9 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
 
   const onRegisterPressed = async data => {
-    navigation.navigate('ConfirmEmail');
+    Auth.signUp(data);
+
+    // navigation.navigate('ConfirmEmail');
   };
 
   const onSignInPress = () => {
@@ -53,22 +56,6 @@ const SignUpScreen = () => {
         />
 
         <CustomInput
-          name="username"
-          control={control}
-          placeholder="Username"
-          rules={{
-            required: 'Username is required',
-            minLength: {
-              value: 3,
-              message: 'Username should be at least 3 characters long',
-            },
-            maxLength: {
-              value: 24,
-              message: 'Username should be max 24 characters long',
-            },
-          }}
-        />
-        <CustomInput
           name="email"
           control={control}
           placeholder="Email"
@@ -77,6 +64,7 @@ const SignUpScreen = () => {
             pattern: {value: EMAIL_REGEX, message: 'Email is invalid'},
           }}
         />
+
         <CustomInput
           name="password"
           control={control}
@@ -90,6 +78,7 @@ const SignUpScreen = () => {
             },
           }}
         />
+
         <CustomInput
           name="password-repeat"
           control={control}

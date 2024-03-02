@@ -12,6 +12,10 @@ import {useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
+import Auth from '../../services/auth';
+
+const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const SignInScreen = () => {
   const {height} = useWindowDimensions();
@@ -19,8 +23,8 @@ const SignInScreen = () => {
 
   const {control, handleSubmit} = useForm();
 
-  const onSignInPressed = data => {
-    console.log(data);
+  const onSignInPressed = (data) => {
+    Auth.signIn(data);
   };
 
   const onForgotPasswordPressed = () => {
@@ -41,10 +45,13 @@ const SignInScreen = () => {
         />
 
         <CustomInput
-          name="username"
-          placeholder="Username"
+          name="email"
           control={control}
-          rules={{required: 'Username is required'}}
+          placeholder="Email"
+          rules={{
+            required: 'Email is required',
+            pattern: {value: EMAIL_REGEX, message: 'Email is invalid'},
+          }}
         />
 
         <CustomInput

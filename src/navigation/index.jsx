@@ -1,29 +1,31 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SignInScreen from '../screens/SignInScreen';
-import SignUpScreen from '../screens/SignUpScreen';
-import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import NewPasswordScreen from '../screens/NewPasswordScreen';
-import ConfirmEmailScreen from '../screens/ConfirmEmailScreen';
-import HomeScreen from '../screens/HomeScreen';
-
-const Stack = createNativeStackNavigator();
+import auth from '@react-native-firebase/auth';
+import App from './app';
+import Auth from './auth';
 
 const Navigation = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        <Stack.Screen name="NewPassword" component={NewPasswordScreen} />
+  const [initializing, setinitializing] = useState();
+  const [user, setUser] = useState();
 
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+  const onAuthStateChange = user => {
+    setUser(user);
+    if (initializing) {
+      setinitializing(false);
+    }
+  };
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChange);
+    return subscriber;
+  }, []);
+
+  if (initializing) {
+    return null;
+  }
+
+  return <NavigationContainer>{user ? <App /> : <Auth />}</NavigationContainer>;
 };
 
 export default Navigation;
