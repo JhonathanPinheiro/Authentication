@@ -1,24 +1,28 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import CustomInput from '../../components/CustomInput';
+import React from 'react';
+import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
+import {useForm} from 'react-hook-form';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton/CustomButton';
-import {useNavigation} from '@react-navigation/native';
+import CustomInput from '../../components/CustomInput';
 
 const ConfirmEmailScreen = () => {
-  const [code, setCode] = useState('');
+  const route = useRoute();
+  const {control, handleSubmit} = useForm({
+    defaultValues: {username: route?.params?.username},
+  });
 
   const navigation = useNavigation();
 
-  const onConfirmPress = () => {
-    navigation.navigate('Home');
+  const onConfirmPressed = async data => {
+    navigation.navigate('SignIn');
   };
 
   const onSignInPress = () => {
     navigation.navigate('SignIn');
   };
 
-  const onResendPress = () => {
-    console.warn('onResendPress');
+  const onResendPress = async () => {
+    console.warn('Success', 'Code was resent to your email');
   };
 
   return (
@@ -27,12 +31,24 @@ const ConfirmEmailScreen = () => {
         <Text style={styles.title}>Confirm your email</Text>
 
         <CustomInput
-          placeholder="Enter your confirmation code"
-          value={code}
-          setValue={setCode}
+          name="username"
+          control={control}
+          placeholder="Username"
+          rules={{
+            required: 'Username code is required',
+          }}
         />
 
-        <CustomButton text="Confirm" onPress={onConfirmPress} />
+        <CustomInput
+          name="code"
+          control={control}
+          placeholder="Enter your confirmation code"
+          rules={{
+            required: 'Confirmation code is required',
+          }}
+        />
+
+        <CustomButton text="Confirm" onPress={handleSubmit(onConfirmPressed)} />
 
         <CustomButton
           text="Resend code"

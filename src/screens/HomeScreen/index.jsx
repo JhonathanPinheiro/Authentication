@@ -1,19 +1,23 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {View, Text} from 'react-native';
 
-const HomeScreen = () => {
+const Home = () => {
   return (
-    <View>
-      <Text style={styles.text}>Home, sweet home</Text>
+    <View style={{flex: 1}}>
+      <Text style={{fontSize: 24, alignSelf: 'center'}}>Home, sweet home</Text>
+      <Text
+        style={{
+          width: '100%',
+          textAlign: 'center',
+          color: 'red',
+          marginTop: 'auto',
+          marginVertical: 20,
+          fontSize: 20,
+        }}>
+        Sign out
+      </Text>
     </View>
   );
 };
 
-export default HomeScreen;
-
-const styles = StyleSheet.create({
-  text: {
-    fontSize: 24,
-    alignSelf: 'center',
-  },
-});
+export default Home;
